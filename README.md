@@ -1,5 +1,6 @@
-# GitHub Template
-GitHub template for all my future GitHub repos
+# Azure API Management - Chaos Monkey 🐒💥
+
+Bringing chaos to your Azure API Management gateways 🐒
 
 ## License Information
 
