@@ -1,6 +1,12 @@
-# Azure API Management - Chaos Monkey 🐒💥
+# Azure API Management - Chaos Monkey 🐒
 
 Bringing chaos to your Azure API Management gateways 🐒
+
+## What chaos does it bring?
+
+A sample that will automatically simulate gateway failures by randomly enabling/disabling a gateway in a given location.
+
+This allows you to simulate gateway failures and see how your platform reacts to it and how it recovers.
 
 ## License Information
 
