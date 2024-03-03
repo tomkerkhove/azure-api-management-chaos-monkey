@@ -1,0 +1,8 @@
+﻿services:
+  chaosmonkey.api:
+    image: chaosmonkey.api
+    ports:
+      - 8888:8080
+    build:
+      context: .
+      dockerfile: ChaosMonkey.API/Dockerfile

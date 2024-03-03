@@ -1,0 +1,7 @@
+﻿services:
+  chaosmonkey.api:
+    environment:
+      CHAOS_MONKEY_AUTH_MODE: ClientSecret
+      CHAOS_MONKEY_TENANT_ID: <tenant-id>
+      CHAOS_MONKEY_APP_ID: <app-id>
+      CHAOS_MONKEY_APP_SECRET: <app-secret>
