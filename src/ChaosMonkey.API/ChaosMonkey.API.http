@@ -1,0 +1,7 @@
+@ChaosMonkey.API_HostAddress = http://localhost:8888
+
+# Get overview of gateway locations
+GET {{ChaosMonkey.API_HostAddress}}/api/v1/subscriptions/b86ca785-448d-441e-8ed9-b75f95ff31a5/resourceGroups/building-resilient-api-platform/service/building-resilient-api-platform-in-azure/locations
+Accept: application/json
+
+###

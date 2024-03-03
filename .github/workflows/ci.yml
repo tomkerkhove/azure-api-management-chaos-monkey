@@ -1,0 +1,20 @@
+name: CI
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+env:
+  IMAGE_TAG: latest
+jobs:
+  rest:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ghcr.io/tomkerkhove/api-management-chaos-monkey-api
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build ./src/ --file ./src/ChaosMonkey.API/Dockerfile --tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
