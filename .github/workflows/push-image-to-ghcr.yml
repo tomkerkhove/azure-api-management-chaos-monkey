@@ -1,4 +1,4 @@
-name: Push REST API Image to GitHub Container Registry
+name: Push API Image to GitHub Container Registry
 on:
   push:
     paths:
@@ -13,6 +13,9 @@ jobs:
   push:
     name: Push to GitHub Container Registry (GHCR)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     env:
       IMAGE_NAME: ghcr.io/tomkerkhove/api-management-chaos-monkey-api
     steps:
