@@ -51,6 +51,7 @@ jobs:
     - name: Deploy Chaos Monkey
       uses: azure/arm-deploy@v1
       with:
+        deploymentName: chaos-monkey-release-${{ github.sha }}
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ vars.RESOURCE_GROUP }}
         template: ./deploy/azure-container-apps.bicep
