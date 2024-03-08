@@ -1,6 +1,6 @@
 param location string = resourceGroup().location
 param appName string = 'api-management-chaos-monkey'
-param environmentName string = 'api-management-resilient-apis-environment'
+param environmentName string = 'building-resilient-api-platform'
 param imageName string = 'ghcr.io/tomkerkhove/api-management-chaos-monkey-api'
 param imageTag string = 'latest'
 param appInsightsName string = 'building-resilient-api-platform'
