@@ -2,6 +2,7 @@ param location string = resourceGroup().location
 param appName string = 'api-management-chaos-monkey'
 param environmentName string = 'resilient-api-environment'
 param imageName string = 'ghcr.io/tomkerkhove/api-management-chaos-monkey-api'
+param imageTag string = 'latest'
 param appInsightsName string = 'building-resilient-api-platform'
 param tenantId string
 param appId string
@@ -29,7 +30,7 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
       containers: [
         {
           name: 'chaos-monkey-api'
-          image: imageName
+          image: '${imageName}:${imageTag}'
           resources: {
             cpu: '1.0'
             memory: '2Gi'
