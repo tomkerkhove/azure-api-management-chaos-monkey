@@ -3,6 +3,7 @@ on:
   push:
     paths:
     - '.github/workflows/push-image-to-ghcr.yml'
+    - 'deploy/**'
     - 'src/**'
     branches:
     - main
