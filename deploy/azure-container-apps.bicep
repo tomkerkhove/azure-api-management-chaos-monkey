@@ -16,6 +16,9 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 resource environment 'Microsoft.App/managedEnvironments@2022-03-01' = {
   name: environmentName
   location: location
+  tags: {
+    app: 'chaos-monkey'
+  }
   properties: {
     daprAIInstrumentationKey: appInsights.properties.InstrumentationKey
   }
@@ -24,6 +27,9 @@ resource environment 'Microsoft.App/managedEnvironments@2022-03-01' = {
 resource app 'Microsoft.App/containerApps@2022-03-01' = {
   name: appName
   location: location
+  tags: {
+    app: 'chaos-monkey'
+  }
   properties: {
     managedEnvironmentId: environment.id
     template: {
