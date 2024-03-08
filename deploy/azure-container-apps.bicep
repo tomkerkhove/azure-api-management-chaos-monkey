@@ -1,6 +1,6 @@
 param location string = resourceGroup().location
 param appName string = 'api-management-chaos-monkey'
-param environmentName string = 'resilient-api-environment'
+param environmentName string = 'api-management-resilient-apis-environment'
 param imageName string = 'ghcr.io/tomkerkhove/api-management-chaos-monkey-api'
 param imageTag string = 'latest'
 param appInsightsName string = 'building-resilient-api-platform'
@@ -35,6 +35,24 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
             cpu: '1.0'
             memory: '2Gi'
           }
+          environmentVariables: [
+            {
+              name: 'CHAOS_MONKEY_AUTH_MODE'
+              value: 'ClientSecret'
+            }
+            {
+              name: 'CHAOS_MONKEY_TENANT_ID'
+              value: tenantId
+            }
+            {
+              name: 'CHAOS_MONKEY_APP_ID'
+              value: appId
+            }
+            {
+              name: 'CHAOS_MONKEY_APP_SECRET'
+              value: appSecret
+            }
+          ]
         }
       ]
     }
