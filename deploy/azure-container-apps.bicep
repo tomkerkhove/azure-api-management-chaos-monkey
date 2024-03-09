@@ -36,6 +36,7 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
       ingress: {
         targetPort: 8080
         external: true
+        allowInsecure: true
       }
     }
     template: {
