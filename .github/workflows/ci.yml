@@ -34,12 +34,3 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build the Docker image
       run: docker build ./src/ --file ./src/ChaosMonkey.API/Dockerfile --tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-  docker:
-    name: Build Docker Image
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: ghcr.io/tomkerkhove/api-management-chaos-monkey-api
-    steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build ./src/ --file ./src/ChaosMonkey.API/Dockerfile --tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
