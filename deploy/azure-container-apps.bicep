@@ -33,7 +33,7 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
   properties: {
     managedEnvironmentId: environment.id    
     ingress: {
-      targetPort: 8080,
+      targetPort: 8080
       external: true
     }
     template: {
