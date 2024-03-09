@@ -36,36 +36,37 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
       ingress: {
         targetPort: 8080
         external: true
-    }
-    template: {
-      containers: [
-        {
-          name: 'chaos-monkey-api'
-          image: '${imageName}:${imageTag}'
-          environmentVariables: [
-            {
-              name: 'CHAOS_MONKEY_AUTH_MODE'
-              value: 'ClientSecret'
+      }
+      template: {
+        containers: [
+          {
+            name: 'chaos-monkey-api'
+            image: '${imageName}:${imageTag}'
+            environmentVariables: [
+              {
+                name: 'CHAOS_MONKEY_AUTH_MODE'
+                value: 'ClientSecret'
+              }
+              {
+                name: 'CHAOS_MONKEY_TENANT_ID'
+                value: tenantId
+              }
+              {
+                name: 'CHAOS_MONKEY_APP_ID'
+                value: appId
+              }
+              {
+                name: 'CHAOS_MONKEY_APP_SECRET'
+                value: appSecret
+              }
+            ]
+            resources: {
+              cpu: '1.0'
+              memory: '2Gi'
             }
-            {
-              name: 'CHAOS_MONKEY_TENANT_ID'
-              value: tenantId
-            }
-            {
-              name: 'CHAOS_MONKEY_APP_ID'
-              value: appId
-            }
-            {
-              name: 'CHAOS_MONKEY_APP_SECRET'
-              value: appSecret
-            }
-          ]
-          resources: {
-            cpu: '1.0'
-            memory: '2Gi'
           }
-        }
-      ]
+        ]
+      }
     }
   }
 }
