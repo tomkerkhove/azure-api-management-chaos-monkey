@@ -12,18 +12,19 @@ namespace ChaosMonkey.API.Repositories
             _armClient = armClient;
         }
 
-        public async Task DisableGatewayInRegion(string subscriptionId, string resourceGroupName, string serviceName, string regionName)
+        public async Task ManageGatewayInRegion(string subscriptionId, string resourceGroupName, string serviceName,
+            string regionName, bool isGatewayEnabled)
         {
             var serviceInfo = await this._armClient.GetServiceInfo(subscriptionId, resourceGroupName, serviceName);
 
             var secondaryLocationInRegion = serviceInfo?.AdditionalLocations.FirstOrDefault(x => x.Location == regionName);
             if (serviceInfo?.Location == regionName)
             {
-                await this._armClient.UpdateService(subscriptionId, resourceGroupName, serviceName, patch => patch.DisableGateway = true);                
+                await this._armClient.UpdateService(subscriptionId, resourceGroupName, serviceName, patch => patch.DisableGateway = isGatewayEnabled);                
             }
             else if (secondaryLocationInRegion != null)
             {
-                await this._armClient.UpdateService(subscriptionId, resourceGroupName, serviceName, patch => patch.AdditionalLocations.First(x => x.Location==regionName).DisableGateway = true);
+                await this._armClient.UpdateService(subscriptionId, resourceGroupName, serviceName, patch => patch.AdditionalLocations.First(x => x.Location==regionName).DisableGateway = isGatewayEnabled);
             }
             else
             {

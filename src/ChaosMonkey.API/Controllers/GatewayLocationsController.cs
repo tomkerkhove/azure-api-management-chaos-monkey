@@ -22,12 +22,12 @@ namespace ChaosMonkey.API.Controllers
             return gatewayInfo;
         }
 
-        [HttpPut("api/v1/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/service/{serviceName}/locations/disableRegion?region={region}")]
-        public async Task<ObjectResult> DisableGateway(string subscriptionId, string resourceGroupName, string serviceName, string region)
+        [HttpPut("api/v1/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/service/{serviceName}/locations/manage?region={region}")]
+        public async Task<ObjectResult> DisableGateway(string subscriptionId, string resourceGroupName, string serviceName, [FromBody] GatewayState gatewayState)
         {
             try
             {
-                await this._apimRepository.DisableGatewayInRegion(subscriptionId, resourceGroupName, serviceName, region);
+                await this._apimRepository.ManageGatewayInRegion(subscriptionId, resourceGroupName, serviceName, gatewayState.RegionName, gatewayState.IsEnabled);
                 return Accepted();
             }
             catch (NotSupportedException)
@@ -35,5 +35,11 @@ namespace ChaosMonkey.API.Controllers
                 return NotFound(new { error = "Region not used" });
             }
         }
+    }
+
+    public class GatewayState
+    {
+        public string RegionName { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }
