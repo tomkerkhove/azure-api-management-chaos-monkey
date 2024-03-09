@@ -31,10 +31,11 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
     app: 'chaos-monkey'
   }
   properties: {
-    managedEnvironmentId: environment.id    
-    ingress: {
-      targetPort: 8080
-      external: true
+    managedEnvironmentId: environment.id
+    configuration: {
+      ingress: {
+        targetPort: 8080
+        external: true
     }
     template: {
       containers: [
