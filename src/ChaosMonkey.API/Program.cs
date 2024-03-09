@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using ChaosMonkey.API;
 using ChaosMonkey.API.Integrations;
 using ChaosMonkey.API.Repositories;
+using Microsoft.Extensions.Logging.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Configuration.AddEnvironmentVariables(prefix: "CHAOS_MONKEY_");
 builder.Services.AddControllers();
 builder.Services.AddSingleton<AzureResourceManagerClient>(services =>
 {
+    var logger = services.GetService<ILoggerFactory>()?.CreateLogger<Program>() ?? new NullLogger<Program>();
     var configuration = services.GetService<IConfiguration>();
     if (configuration == null)
     {
@@ -19,10 +21,13 @@ builder.Services.AddSingleton<AzureResourceManagerClient>(services =>
     if (authMode == "ClientSecret")
     {
         var tenantId = configuration.GetValue<string>("TENANT_ID");
-        return new AzureResourceManagerClient(tenantId, configuration.GetValue<string>("APP_ID"), configuration.GetValue<string>("APP_SECRET"));
+        var appId = configuration.GetValue<string>("APP_ID");
+        logger.LogInformation("Using client secret authentication for {tenantId} with {appId}", tenantId, appId);
+        return new AzureResourceManagerClient(tenantId, appId, configuration.GetValue<string>("APP_SECRET"));
     }
     else
     {
+        logger.LogInformation("Using default authentication given auth mode {authMode} is not supported", authMode);
         return new AzureResourceManagerClient();
     }
 });
