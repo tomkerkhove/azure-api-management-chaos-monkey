@@ -23,10 +23,17 @@ namespace ChaosMonkey.API.Controllers
         }
 
         [HttpPut("api/v1/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/service/{serviceName}/locations/disableRegion?region={region}")]
-        public async Task<List<GatewayInfo>> DisableGateway(string subscriptionId, string resourceGroupName, string serviceName, string region)
+        public async Task<ObjectResult> DisableGateway(string subscriptionId, string resourceGroupName, string serviceName, string region)
         {
-            var gatewayInfo = await this._apimRepository.Get(subscriptionId, resourceGroupName, serviceName);
-            return gatewayInfo;
+            try
+            {
+                await this._apimRepository.DisableGatewayInRegion(subscriptionId, resourceGroupName, serviceName, region);
+                return Accepted();
+            }
+            catch (NotSupportedException)
+            {
+                return NotFound(new { error = "Region not used" });
+            }
         }
     }
 }

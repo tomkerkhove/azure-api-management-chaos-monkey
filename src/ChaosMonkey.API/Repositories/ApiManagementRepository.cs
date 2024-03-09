@@ -16,17 +16,19 @@ namespace ChaosMonkey.API.Repositories
         {
             var serviceInfo = await this._armClient.GetServiceInfo(subscriptionId, resourceGroupName, serviceName);
 
-            var secondaryLocationInRegion = serviceInfo.AdditionalLocations.FirstOrDefault(x => x.Location == regionName);
-            if (serviceInfo?.Location == regionName && secondaryLocationInRegion == null)
-            {
-                
-            }
-
-            if (serviceInfo.Location == regionName)
+            var secondaryLocationInRegion = serviceInfo?.AdditionalLocations.FirstOrDefault(x => x.Location == regionName);
+            if (serviceInfo?.Location == regionName)
             {
                 await this._armClient.UpdateService(subscriptionId, resourceGroupName, serviceName, patch => patch.DisableGateway = true);                
             }
-
+            else if (secondaryLocationInRegion != null)
+            {
+                await this._armClient.UpdateService(subscriptionId, resourceGroupName, serviceName, patch => patch.AdditionalLocations.First(x => x.Location==regionName).DisableGateway = true);
+            }
+            else
+            {
+                throw new NotSupportedException("Region not found");
+            }
         }
 
         public async Task<List<GatewayInfo>> Get(string subscriptionId, string resourceGroupName, string serviceName)
