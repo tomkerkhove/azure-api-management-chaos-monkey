@@ -31,16 +31,16 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
     app: 'chaos-monkey'
   }
   properties: {
-    managedEnvironmentId: environment.id
+    managedEnvironmentId: environment.id    
+    ingress: {
+      targetPort: 8080
+      external: true
+    }
     template: {
       containers: [
         {
           name: 'chaos-monkey-api'
           image: '${imageName}:${imageTag}'
-          resources: {
-            cpu: '1.0'
-            memory: '2Gi'
-          }
           environmentVariables: [
             {
               name: 'CHAOS_MONKEY_AUTH_MODE'
@@ -59,6 +59,10 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
               value: appSecret
             }
           ]
+          resources: {
+            cpu: '1.0'
+            memory: '2Gi'
+          }
         }
       ]
     }
