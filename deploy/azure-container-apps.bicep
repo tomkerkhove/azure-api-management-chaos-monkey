@@ -36,7 +36,6 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
       ingress: {
         targetPort: 8080
         external: true
-        allowInsecure: true
       }
     }
     template: {
@@ -60,6 +59,22 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
             {
               name: 'CHAOS_MONKEY_APP_SECRET'
               value: appSecret
+            }
+          ]
+          probes: [
+            {
+              type: 'Readiness'
+              httpGet: {
+                path: '/api/v1/heath'
+                port: 8080
+              }
+            }
+            {
+              type: 'Liveness'
+              httpGet: {
+                path: '/api/v1/heath'
+                port: 8080
+              }
             }
           ]
           resources: {
