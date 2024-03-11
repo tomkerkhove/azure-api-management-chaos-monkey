@@ -65,14 +65,14 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
             {
               type: 'Readiness'
               httpGet: {
-                path: '/api/v1/heath'
+                path: '/api/v1/health'
                 port: 8080
               }
             }
             {
               type: 'Liveness'
               httpGet: {
-                path: '/api/v1/heath'
+                path: '/api/v1/health'
                 port: 8080
               }
             }
