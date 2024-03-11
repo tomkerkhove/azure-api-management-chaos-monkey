@@ -11,7 +11,6 @@ param appSecret string
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
-  location: location
 }
 
 resource environment 'Microsoft.App/managedEnvironments@2022-03-01' = {
