@@ -22,7 +22,7 @@ namespace ChaosMonkey.API.Controllers
             return gatewayInfo;
         }
 
-        [HttpPut("api/v1/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/service/{serviceName}/locations/manage?region={region}")]
+        [HttpPut("api/v1/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/service/{serviceName}/locations/manage")]
         public async Task<ObjectResult> DisableGateway(string subscriptionId, string resourceGroupName, string serviceName, [FromBody] GatewayState gatewayState)
         {
             try
