@@ -1,4 +1,5 @@
-﻿using ChaosMonkey.API.Contracts;
+﻿using Azure.Core;
+using ChaosMonkey.API.Contracts;
 using ChaosMonkey.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,15 +26,15 @@ namespace ChaosMonkey.API.Controllers
         [HttpPut("api/v1/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/service/{serviceName}/locations/manage")]
         public async Task<ObjectResult> DisableGateway(string subscriptionId, string resourceGroupName, string serviceName, [FromBody] GatewayState gatewayState)
         {
-            try
+            var regionName = gatewayState?.RegionName;
+            var azureRegionInfo = new AzureLocation(regionName);
+            if (string.IsNullOrWhiteSpace(azureRegionInfo.DisplayName))
             {
-                await this._apimRepository.ManageGatewayInRegion(subscriptionId, resourceGroupName, serviceName, gatewayState.RegionName, gatewayState.IsEnabled);
-                return Accepted();
+                return BadRequest(new { message = $"Region '{regionName}' is not a supported region" });
             }
-            catch (NotSupportedException)
-            {
-                return NotFound(new { error = "Region not used" });
-            }
+
+            await this._apimRepository.ManageGatewayInRegion(subscriptionId, resourceGroupName, serviceName, azureRegionInfo, gatewayState.IsEnabled);
+            return Accepted();
         }
     }
 

@@ -1,3 +1,5 @@
+using Azure.Core;
+using Azure.ResourceManager.ApiManagement.Models;
 using ChaosMonkey.API.Contracts;
 using ChaosMonkey.API.Integrations;
 
@@ -12,19 +14,22 @@ namespace ChaosMonkey.API.Repositories
             _armClient = armClient;
         }
 
-        public async Task ManageGatewayInRegion(string subscriptionId, string resourceGroupName, string serviceName,
-            string regionName, bool isGatewayEnabled)
+        public async Task ManageGatewayInRegion(string subscriptionId, string resourceGroupName, string serviceName, AzureLocation azureRegionInfo, bool isGatewayEnabled)
         {
             var serviceInfo = await this._armClient.GetServiceInfo(subscriptionId, resourceGroupName, serviceName);
 
-            var secondaryLocationInRegion = serviceInfo?.AdditionalLocations.FirstOrDefault(x => x.Location == regionName);
-            if (serviceInfo?.Location == regionName)
+            var secondaryLocationInRegion = serviceInfo?.AdditionalLocations.FirstOrDefault(x => x.Location == azureRegionInfo);
+            if (serviceInfo?.Location == azureRegionInfo)
             {
                 await this._armClient.UpdateService(subscriptionId, resourceGroupName, serviceName, patch => patch.DisableGateway = isGatewayEnabled);                
             }
             else if (secondaryLocationInRegion != null)
             {
-                await this._armClient.UpdateService(subscriptionId, resourceGroupName, serviceName, patch => patch.AdditionalLocations.First(x => x.Location==regionName).DisableGateway = isGatewayEnabled);
+                var regionalUpdate = new AdditionalLocation(azureRegionInfo, serviceInfo.Sku)
+                {
+                    DisableGateway = isGatewayEnabled
+                };
+                await this._armClient.UpdateService(subscriptionId, resourceGroupName, serviceName, patch => patch.AdditionalLocations.Add(regionalUpdate));
             }
             else
             {

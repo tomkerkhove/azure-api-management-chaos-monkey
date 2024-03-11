@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddProblemDetails();
 builder.Configuration.AddEnvironmentVariables(prefix: "CHAOS_MONKEY_");
 builder.Services.AddControllers();
 builder.Services.AddSingleton<AzureResourceManagerClient>(services =>
@@ -50,18 +51,6 @@ app.UseSwaggerUI();
 
 app.MapControllers();
 
-app.UseExceptionHandler(exceptionHandlerApp =>
-{
-    exceptionHandlerApp.Run(async httpContext =>
-    {
-        var problemDetailsService = httpContext.RequestServices.GetService<IProblemDetailsService>();
-        if (problemDetailsService == null
-            || !await problemDetailsService.TryWriteAsync(new() { HttpContext = httpContext }))
-        {
-            // Fallback behavior
-            await httpContext.Response.WriteAsync("Fallback: An error occurred.");
-        }
-    });
-});
+app.UseExceptionHandler();
 
 app.Run();
