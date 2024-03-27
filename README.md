@@ -1,5 +1,7 @@
 # Azure API Management - Chaos Monkey 🐒
 
+> 🏗️ This sample is not ready yet, feel free to subscribe to stay up-to-date.
+
 Bringing chaos to your Azure API Management gateways 🐒
 
 ## What chaos does it bring?
