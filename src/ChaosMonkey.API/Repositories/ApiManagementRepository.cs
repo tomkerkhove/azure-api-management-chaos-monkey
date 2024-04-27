@@ -25,11 +25,13 @@ namespace ChaosMonkey.API.Repositories
             }
             else if (secondaryLocationInRegion != null)
             {
-                var regionalUpdate = new AdditionalLocation(azureRegionInfo, serviceInfo.Sku)
+                await this._armClient.UpdateService(subscriptionId, resourceGroupName, serviceName, patch =>
                 {
-                    DisableGateway = isGatewayEnabled
-                };
-                await this._armClient.UpdateService(subscriptionId, resourceGroupName, serviceName, patch => patch.AdditionalLocations.Add(regionalUpdate));
+                    foreach (var matchingSecondaryLocation in patch.AdditionalLocations.Where(x => x.Location == azureRegionInfo))
+                    {
+                        matchingSecondaryLocation.DisableGateway = isGatewayEnabled;
+                    }
+                });
             }
             else
             {
