@@ -6,8 +6,14 @@ on:
   pull_request:
     branches:
       - 'main'
+
+permissions:
+  id-token: write
+  contents: read
+
 env:
   IMAGE_TAG: latest
+
 jobs:
   validate:
     name: Validate Bicep
@@ -20,7 +26,9 @@ jobs:
     - name: Log in to Azure
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+        client-id: ${{ secrets.DEPLOY_AZURE_APP_ID }}
 
     - uses: azure/arm-deploy@v1
       name: Run preflight validation
