@@ -4,10 +4,6 @@ param environmentName string = 'building-resilient-api-platform'
 param imageName string = 'ghcr.io/tomkerkhove/api-management-chaos-monkey-api'
 param imageTag string = 'latest'
 param appInsightsName string = 'building-resilient-api-platform'
-param tenantId string
-param appId string
-@secure()
-param appSecret string
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
@@ -30,6 +26,9 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
   tags: {
     app: 'chaos-monkey'
   }
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     managedEnvironmentId: environment.id
     configuration: {
@@ -46,19 +45,7 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
           env: [
             {
               name: 'CHAOS_MONKEY_AUTH_MODE'
-              value: 'ClientSecret'
-            }
-            {
-              name: 'CHAOS_MONKEY_TENANT_ID'
-              value: tenantId
-            }
-            {
-              name: 'CHAOS_MONKEY_APP_ID'
-              value: appId
-            }
-            {
-              name: 'CHAOS_MONKEY_APP_SECRET'
-              value: appSecret
+              value: 'ManagedIdentity'
             }
           ]
           probes: [

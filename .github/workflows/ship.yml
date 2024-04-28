@@ -7,9 +7,15 @@ on:
     - 'src/**'
     branches:
     - main
-  workflow_dispatch: 
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
 env:
   IMAGE_TAG: latest
+
 jobs:
   push:
     name: Push to GitHub Container Registry (GHCR)
@@ -46,7 +52,9 @@ jobs:
     - name: Log in to Azure
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+        client-id: ${{ secrets.DEPLOY_AZURE_APP_ID }}
 
     - name: Deploy Chaos Monkey
       uses: azure/arm-deploy@v1
@@ -55,5 +63,5 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ vars.RESOURCE_GROUP }}
         template: ./deploy/azure-container-apps.bicep
-        parameters: 'imageTag=${{ github.sha }} tenantId=${{ secrets.AZURE_TENANT_ID }} appId=${{ secrets.AZURE_APP_ID }} appSecret=${{ secrets.AZURE_APP_SECRET }}'
+        parameters: 'imageTag=${{ github.sha }}'
         failOnStdErr: true
