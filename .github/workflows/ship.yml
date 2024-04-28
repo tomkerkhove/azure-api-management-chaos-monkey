@@ -7,9 +7,15 @@ on:
     - 'src/**'
     branches:
     - main
-  workflow_dispatch: 
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
 env:
   IMAGE_TAG: latest
+
 jobs:
   push:
     name: Push to GitHub Container Registry (GHCR)
