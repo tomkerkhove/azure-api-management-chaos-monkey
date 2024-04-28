@@ -4,10 +4,6 @@ param environmentName string = 'building-resilient-api-platform'
 param imageName string = 'ghcr.io/tomkerkhove/api-management-chaos-monkey-api'
 param imageTag string = 'latest'
 param appInsightsName string = 'building-resilient-api-platform'
-param tenantId string
-param appId string
-@secure()
-param appSecret string
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
